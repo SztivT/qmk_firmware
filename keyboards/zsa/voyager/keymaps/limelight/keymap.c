@@ -69,6 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  set_arcane_cache(keycode, record);
   switch (keycode) {
 
     case RGB_SLD:
@@ -76,6 +77,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         rgblight_mode(1);
       }
       return false;
+    case ARCANE:
+      if (record->event.pressed) {
+        process_arcane(keycode, record);
+      }
+      return false;
+
   }
   return true;
 }
