@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
 #include "dance.c"
+#include "leader.c"
 #include "rgb.c"
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
@@ -14,7 +15,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRANSPARENT, KC_Q,           KC_Y,           KC_O,           KC_U,           KC_TRANSPARENT,                                 KC_J,           KC_G,           KC_N,           KC_W,           KC_K,           KC_TRANSPARENT, 
     TD(DANCE_0),    MT(MOD_LALT, KC_H),KC_I,           MT(MOD_LSFT, KC_E),MT(MOD_LCTL, KC_A),OSL(5),                                         KC_P,           MT(MOD_LCTL, KC_D),MT(MOD_RSFT, KC_R),KC_S,           MT(MOD_LALT, KC_L),KC_Z,           
     KC_TAB,         KC_X,           KC_SCLN,        KC_DOT,         KC_COMMA,       KC_TRANSPARENT,                                 KC_B,           KC_C,           KC_M,           KC_F,           KC_V,           KC_ENTER,       
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, TD(DANCE_1),                                    KC_L,           KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, TD(DANCE_1),                                    QK_LEAD,           KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
                                                     LT(4,KC_SPACE), OSL(3),                                         OSL(2),         LT(7,KC_T)
   ),
   [1] = LAYOUT_voyager(
