@@ -67,6 +67,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
+bool remember_last_key_user(uint16_t keycode, keyrecord_t* record,
+		                            uint8_t* remembered_mods) {
+    switch (keycode) {
+	    case ARCANE:
+		    return false;
+    }
+    return true;
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   set_arcane_cache(keycode, record);
