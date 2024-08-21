@@ -86,21 +86,16 @@ tap_dance_action_t tap_dance_actions[] = {
         [DANCE_15] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_15, dance_15_finished, dance_15_reset),
 };
 
-bool remember_last_key_user(uint16_t keycode, keyrecord_t* record,
-		                            uint8_t* remembered_mods) {
-    switch (keycode) {
-	    case ARCANE:
-		    return false;
-    }
-    return true;
-}
+const uint16_t PROGMEM test_combo1[] = {KC_A, KC_B, COMBO_END};
+combo_t key_combos[] = {
+    COMBO(test_combo1, KC_ESC),
+    };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (!record->event.pressed) {
 	  set_arcane_cache(keycode, record);
       }
   switch (keycode) {
-
     case RGB_SLD:
       if (record->event.pressed) {
         rgblight_mode(1);

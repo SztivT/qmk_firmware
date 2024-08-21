@@ -8,12 +8,12 @@ static tap arcane_dance_state[1];
 
 uint8_t kbd_rows = 12;
 
-void set_arcane_cache(uint16_t keycode, keyrecord_t *record) {
+static void set_arcane_cache(uint16_t keycode, keyrecord_t *record) {
 	// Save keyrecord
 	arcane_cache = *record;
 }
 
-void set_arcane_last(uint16_t keycode, keyrecord_t *record) {
+static void set_arcane_last(uint16_t keycode, keyrecord_t *record) {
 	// If The keycode is ARCANE then ignore it
 	switch(keycode) {
 		case ARCANE:
