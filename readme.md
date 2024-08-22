@@ -1,75 +1,101 @@
-# ZSA's fork of QMK Firmware
+# Arcane functions
 
-[![Current Version](https://img.shields.io/github/tag/zsa/qmk_firmware.svg)](https://github.com/zsa/qmk_firmware/tags)
-[![Build firmware](https://github.com/zsa/qmk_firmware/actions/workflows/build.yml/badge.svg)](https://github.com/zsa/qmk_firmware/actions/workflows/build.yml)
-[![Unit Tests](https://github.com/zsa/qmk_firmware/actions/workflows/unit_test.yml/badge.svg)](https://github.com/zsa/qmk_firmware/actions/workflows/unit_test.yml)
-[![GitHub contributors](https://img.shields.io/github/contributors/zsa/qmk_firmware.svg)](https://github.com/zsa/qmk_firmware/pulse/monthly)
-[![GitHub forks](https://img.shields.io/github/forks/zsa/qmk_firmware.svg?style=social&label=Fork)](https://github.com/zsa/qmk_firmware/)
+This is the first implementation of
+[empressabyss](https://github.com/empressabyss)'s Arcane key concept.
 
-This purpose of this fork is maintain a clean repo that only contains the keyboard code that we need, and as little else as possible.  This is to keep it lightweight, since we only need a couple of keyboards. This is the repo that the EZ Configurator will pull from.
-## Documentation
+This proof of Concept introduces the ability for the Arcane key to be aware of
+whether or not the last keycode has been sent from the same split side.
 
-* [See the official documentation on docs.qmk.fm](https://docs.qmk.fm)
+While the
+[original implementation](https://github.com/empressabyss/nordrassil?tab=readme-ov-file#implementation)
+cultivates the keys to understand the split sides, it suggest to use the
+keymatrix to achieve the Arcane functionality.
 
-The docs are powered by [VitePress](https://vitepress.dev/). They are also viewable offline; see [Previewing the Documentation](https://docs.qmk.fm/#/contributing?id=previewing-the-documentation) for more details.
+## Proof of Concept
 
-You can request changes by making a fork and opening a [pull request](https://github.com/qmk/qmk_firmware/pulls).
+The logic in the poc requeries `REPEAT_KEY_ENABLE = yes` presenting in the
+`rules.mk` file.  The PoC is not aiming to further configure the keys, just
+adds the behavior.
 
+## Usage
 
-## Supported Keyboards
+Assuming the familairity with the original implementation's logic, and qmk's way
+to define custom keycodes I leave this part for the other well-documented
+sources and you to figure it out.
 
-* [ErgoDox EZ](/keyboards/ergodox_ez/)
-* [Planck EZ](/keyboards/planck/ez)
-* [Moonlander Mark I](/keyboards/moonlander)
+Other than that you should incorporate the following in your keymap configuration:
 
-## Building
+- `bool remember_last_key_user(uint16_t keycode, keyrecord_t* record,
+uint8_t* remembered_mods) {}`:
 
-To set up the local build enviroment to create the firmware image manually, head to the [Newbs guide from QMK](https://docs.qmk.fm/#/newbs).
-And instead of using just `qmk setup`, you will want to run this instead:
-
-```sh
-qmk setup zsa/qmk_firmware -b firmware23
+``` c
+switch (keycode) {
+    case ARCANE:
+        return false;
+}
 ```
 
-## Maintainers
+- `bool process_record_user(uint16_t keycode, keyrecord_t *record) {}`:
 
-QMK is developed and maintained by Jack Humbert of OLKB with contributions from the community, and of course, [Hasu](https://github.com/tmk). The OLKB product firmwares are maintained by [Jack Humbert](https://github.com/jackhumbert), the Ergodox EZ by [ZSA Technology Labs](https://github.com/zsa), the Clueboard by [Zach White](https://github.com/skullydazed), and the Atreus by [Phil Hagelberg](https://github.com/technomancy).
+```c
+process_arcane(keycode, record);
+```
 
-# Update Process
+- `static keyrecord_t arcane_cache = {0};`, somewhere early, because this
+is the one holding the keyrecord information which is needed to be able to
+compare. The repeat logic itself does not exposes the keyrecord.
 
-1. Check out branch from ZSA's master branch:
-    1. `git remote add zsa https://github.com/zsa/qmk_firmware.git`
-    2. `git fetch --all`
-    3. `git checkout -B branchname zsa/master`
-    4. `git push -u zsa branchname`
-2. Check for core changes:
-    - [https://github.com/qmk/qmk_firmware/commits/master/quantum](https://github.com/qmk/qmk_firmware/commits/master/quantum)
-    - [https://github.com/qmk/qmk_firmware/commits/master/tmk_core](https://github.com/qmk/qmk_firmware/commits/master/tmk_core)
-    - [https://github.com/qmk/qmk_firmware/commits/master/util](https://github.com/qmk/qmk_firmware/commits/master/util)
-    - [https://github.com/qmk/qmk_firmware/commits/master/drivers](https://github.com/qmk/qmk_firmware/commits/master/drivers)
-    - [https://github.com/qmk/qmk_firmware/commits/master/lib](https://github.com/qmk/qmk_firmware/commits/master/lib)
-    - These folders are the important ones for maintaining the repo and keeping it properly up to date. Most, but not all, changes on this list should be pulled into our repo.
-4. `git merge (hash|tag)`
-    - `git rm -rf docs users layouts .vscode` to remove the docs and user code that we don't want.
-    - To remove all of the keyboard exept the ones we want:
-      ```sh
-      find ./keyboards -mindepth 1 -maxdepth 1 -type d -not -name ergodox_ez -not -name planck -not -name moonlander -not -name zsa -exec git rm -rf '{}' \;
-      find ./keyboards/planck -mindepth 1 -maxdepth 1 -type d -not -name ez -not -name base -not -name glow -not -name keymaps -exec git rm -rf '{}' \;
-      ```
-    - To remove all of the keymaps from folder that we don't want:
-      ```sh
-      find ./keyboards/ -mindepth 3 -maxdepth 3 -type d -not -name ld -not -name default -not -name oryx -not -name webusb -not -name base -not -name glow -not -name reactive -not -name shine -not -name keymaps -not -name halfmoon -exec git rm -rf '{}' \;
-      ```
-    - Restore necessary files/folders:
-      ```sh
-      git checkout HEAD -- keyboards/handwired/pytest
-      ```
-    - Resolve merge conflicts, and commit.
+- `uint8_t kbd_rows = 12;` this only used by the process function so it
+does not need to be defined long before it, but as a rule of thumb, just
+group it with `arcane_cache`. If by any chance your keyboard behaves weird
+consider to look into your matrix layout. The logic follows the general
+matrix implementation of
+[splits](https://docs.qmk.fm/features/split_keyboard#layout-macro).
+If your board does not follow the 4 rows + 2 thumb rows layout, then
+adjust the value of this respectively.
 
-4. Commit update
-   * Include commit info in `[changelog.md](changelog.md)`
-5. Open Pull request, and include information about the commit
+- `void post_process_record_user(uint16_t keycode, keyrecord_t *record) {}`
 
-## Strategy
+```c
+set_arcane_cache(keycode, record);
+```
 
-To keep PRs small and easier to test, they should ideally be 1:1 with commits from QMK Firmware master. They should only group commits if/when it makes sense. Such as multiple commits for a specific feature (split RGB support, for instance)
+- you need to define the above mentioned functions for those calls:
+
+```c
+void process_arcane(uint16_t keycode, keyrecord_t *record) {
+    if (arcane_cache.event.key.row < kbd_rows / 2
+        && record.event.key.row < kbd_rows / 2)
+        || (arcane_cache.event.key.row < kbd_rows / 2
+            && record.event.key.row < kbd_rows / 2) {
+        tap_code16(get_last_keycode());
+        return;
+    }
+    SEND_STRING("Cast");
+}
+```
+
+```c
+set_arcane_cache(uint16_t keycode, keyrecord_t *record) {
+    if (keycode == ARCANE) return;
+    arcane_cache = *record;
+}
+```
+
+## Implementation Details
+
+In this implementation as the logic relies on the repeat logic of QMK and not handles
+it's own, I simply decided to not deal with cases when the Arcane key is
+repeated, or it's casted, but I simply excluded it from repeat logic.
+
+> Maybe it worth a shot to look into the possibilities of arcane repeats.
+
+On every keypress the logic puts the keyrecord (with the corresponding keycode) into
+the `arcane_cache` - if it is not Arcane key - by overwriting it. This runs as a
+post-process to minimize the number of conditionals in `process_record_*` functions.
+
+The processing itself lives on the presumption, that the splits are symetrical
+to each other row-wise.
+If the keyrecord contains a row number which is less than the half of
+`kbd_rows`, it considered coming from the master half, while if it is more than
+or equal it is consiedered to be received from the slave half.
