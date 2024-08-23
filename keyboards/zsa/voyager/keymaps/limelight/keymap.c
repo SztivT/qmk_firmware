@@ -13,7 +13,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     TD(DANCE_0),    MT(MOD_LALT, KC_H),KC_I,           MT(MOD_LSFT, KC_E),MT(MOD_LCTL, KC_A),OSL(5),                                         KC_P,           MT(MOD_LCTL, KC_D),MT(MOD_RSFT, KC_R),KC_S,           MT(MOD_LALT, KC_L),KC_Z,           
     KC_TAB,         KC_X,           KC_SCLN,        KC_DOT,         KC_COMMA,       KC_TRANSPARENT,                                 KC_B,           KC_C,           KC_M,           KC_V,           KC_ENTER,       KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, TD(DANCE_1),                                    QK_LEAD,           KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-                                                    LT(4,KC_SPACE), TD(DANCE_ARCANE),                                         TD(DANCE_ARCANE),         LT(7,KC_T)
+                                                    LT(4,KC_SPACE), ARCANE,                                         ARCANE,         LT(7,KC_T)
   ),
   [1] = LAYOUT_voyager(
     STN_N1,         STN_N2,         STN_N3,         STN_N4,         STN_N5,         STN_N6,                                         STN_N7,         STN_N8,         STN_N9,         STN_NA,         STN_NB,         STN_NC,         
@@ -67,7 +67,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 tap_dance_action_t tap_dance_actions[] = {
-        [DANCE_ARCANE] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_arcane, dance_arcane_finished, dance_arcane_reset),
         [DANCE_0] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_0, dance_0_finished, dance_0_reset),
         [DANCE_1] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_1, dance_1_finished, dance_1_reset),
         [DANCE_2] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_2, dance_2_finished, dance_2_reset),
@@ -92,10 +91,15 @@ combo_t key_combos[] = {
     };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-      if (!record->event.pressed) {
+      if (record->event.pressed) {
 	  set_arcane_cache(keycode, record);
       }
   switch (keycode) {
+    case ARCANE:
+      if (record->event.pressed) {
+	      process_arcane();
+      }
+      return false;
     case RGB_SLD:
       if (record->event.pressed) {
         rgblight_mode(1);
