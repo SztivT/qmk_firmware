@@ -91,13 +91,10 @@ combo_t key_combos[] = {
     };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-      if (record->event.pressed) {
-	  set_arcane_cache(keycode, record);
-      }
   switch (keycode) {
     case ARCANE:
       if (record->event.pressed) {
-	      process_arcane();
+	      process_arcane(keycode, record);
       }
       return false;
     case RGB_SLD:
@@ -111,6 +108,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (!record->event.pressed) {
-	  set_arcane_last(keycode, record);
+	  set_arcane_cache(keycode, record);
       }
 }
