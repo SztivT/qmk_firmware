@@ -91,23 +91,23 @@ combo_t key_combos[] = {
     };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case ARCANE:
-      if (record->event.pressed) {
-	      process_arcane(keycode, record);
-      }
-      return false;
-    case RGB_SLD:
-      if (record->event.pressed) {
-        rgblight_mode(1);
-      }
-      return false;
-  }
-  return true;
+	process_arcane(keycode, record);
+	switch (keycode) {
+		case RGB_SLD:
+			if (record->event.pressed) {
+				rgblight_mode(1);
+			}
+			return false;
+	  }
+	  return true;
 }
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (!record->event.pressed) {
-	  set_arcane_cache(keycode, record);
       }
+}
+
+void keyboard_post_init_user(void) {
+	 debug_enable=true;
+         rgb_matrix_enable();
 }
