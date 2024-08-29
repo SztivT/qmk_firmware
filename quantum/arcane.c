@@ -38,19 +38,16 @@ bool arcane_set_mode(void) {
 	return arcane_is_leader();
 }
 
-bool is_same_split_side(keyrecord_t* record) {
-	if (record->event.key.row < KEYBOARD_ROWS_PER_SPLIT
-		&& get_last_record()->event.key.row < KEYBOARD_ROWS_PER_SPLIT) {
-		/* 
-		 * Main half
-		 */
+bool is_main(keyrecord_t* record) {
+	if (record->event.key.row < KEYBOARD_ROWS_PER_SPLIT) {
 		return true;
 	}
-	if (record->event.key.row >= KEYBOARD_ROWS_PER_SPLIT
-		&& get_last_record()->event.key.row >= KEYBOARD_ROWS_PER_SPLIT) {
-		/* 
-		 * Aux half
-		 */
+	return false;
+}
+
+bool is_same_split_side(keyrecord_t* record) {
+	if ((is_main(record) && is_main(get_last_record()))
+			|| (is_main(record) && is_main(get_last_record()))) {
 		return true;
 	}
 	return false;

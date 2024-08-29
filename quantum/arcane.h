@@ -18,6 +18,8 @@ void register_arcane(uint16_t keycode, keyrecord_t* record);
  */
 bool arcane_set_mode(void);
 
+bool is_main(keyrecord_t* record);
+
 bool is_same_split_side(keyrecord_t* record);
 
 void arcane_leader_start(void);
