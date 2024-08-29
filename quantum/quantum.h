@@ -246,6 +246,9 @@ extern layer_state_t layer_state;
 #ifdef LAYER_LOCK_ENABLE
 #    include "layer_lock.h"
 #endif
+
+# include "process_arcane.h"
+
 void set_single_persistent_default_layer(uint8_t default_layer);
 
 #define IS_LAYER_ON(layer) layer_state_is(layer)

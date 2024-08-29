@@ -317,6 +317,7 @@ bool process_record_quantum(keyrecord_t *record) {
             // Must run asap to ensure all keypresses are recorded.
             process_dynamic_macro(keycode, record) &&
 #endif
+	    process_arcane(keycode, record) &&
 #ifdef REPEAT_KEY_ENABLE
             process_last_key(keycode, record) && process_repeat_key(keycode, record) &&
 #endif

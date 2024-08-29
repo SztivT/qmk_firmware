@@ -746,6 +746,7 @@ enum qk_keycode_defines {
     QK_REPEAT_KEY = 0x7C79,
     QK_ALT_REPEAT_KEY = 0x7C7A,
     QK_LAYER_LOCK = 0x7C7B,
+    ARCANE = 0x7C7C,
     QK_KB_0 = 0x7E00,
     QK_KB_1 = 0x7E01,
     QK_KB_2 = 0x7E02,

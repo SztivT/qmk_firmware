@@ -7,6 +7,8 @@
 
 #include <string.h>
 
+#include "keycodes.h"
+
 #ifndef LEADER_TIMEOUT
 #    define LEADER_TIMEOUT 300
 #endif
