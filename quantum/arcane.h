@@ -16,7 +16,7 @@ void register_arcane(uint16_t keycode, keyrecord_t* record);
 /*
  * Defines Arcane mode
  */
-bool arcane_set_mode(void);
+bool arcane_set_leader_mode(void);
 
 bool is_main(keyrecord_t* record);
 

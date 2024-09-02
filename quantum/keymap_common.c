@@ -188,9 +188,6 @@ action_t action_for_keycode(uint16_t keycode) {
 #    endif // LEGACY_MAGIC_HANDLING
             break;
 #endif
-	case ARCANE:
-	    process_arcane(record->keycode, record);
-	    break;
 
         default:
             action.code = ACTION_NO;

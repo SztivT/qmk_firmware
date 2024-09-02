@@ -106,8 +106,9 @@ bool process_arcane_cast_user(uint16_t keycode) {
 	switch (keycode) {
 		case MT(MOD_RSFT, KC_R):
 			tap_code16(KC_N);
-			return;
+			return false;
 	}
+	return true;
 }
 
 void keyboard_post_init_user(void) {

@@ -10,6 +10,10 @@
   #define KEYBOARD_ROWS_PER_SPLIT 6
 #endif
 
+#ifndef ARCANE_TAPPING_TERM
+#  define ARCANE_TAPPING_TERM TAPPING_TERM
+#endif
+
 bool arcane_leader = false;
 
 void arcane_repeat(void) {
@@ -33,7 +37,7 @@ bool arcane_is_leader(void) {
 	return arcane_leader;
 }
 
-bool arcane_set_mode(void) {
+bool arcane_set_leader_mode(void) {
 	arcane_leader = timer_elapsed(get_last_record()->event.time) > LEADER_MODE_WAIT;
 	return arcane_is_leader();
 }
@@ -45,10 +49,19 @@ bool is_main(keyrecord_t* record) {
 	return false;
 }
 
-bool is_same_split_side(keyrecord_t* record) {
+bool is_same_split_side(keyrecord_t* record, keyrecord_t* compare) {
 	if ((is_main(record) && is_main(get_last_record()))
 			|| (is_main(record) && is_main(get_last_record()))) {
 		return true;
 	}
 	return false;
+}
+
+bool is_same_split_side_repeat(keyrecord_t* record) {
+	is_same_split_side(record, get_last_record())
+	return false;
+}
+
+bool is_inside_tapping_term(keyrecord_t* record) {
+	return timer_elapsed(record->event.time) < ARCANE_TAPPING_TERM;
 }

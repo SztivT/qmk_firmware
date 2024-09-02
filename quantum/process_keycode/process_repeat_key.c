@@ -69,6 +69,8 @@ static bool remember_last_key(uint16_t keycode, keyrecord_t* record, uint8_t* re
         case QK_ALT_REPEAT_KEY:
 #endif // NO_ALT_REPEAT_KEY
             return false;
+        case ARCANE:
+            return false;
     }
 
     return remember_last_key_user(keycode, record, remembered_mods);
