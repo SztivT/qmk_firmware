@@ -130,3 +130,11 @@ via*.json
 !/keyboards/zsa/**/keymaps/default/**
 !/keyboards/zsa/**/keymaps/oryx
 !/keyboards/zsa/**/keymaps/oryx/**
+
+# Ignored
+/keyboards/**
+!/keyboards/zsa/common
+!/keyboards/zsa/common/**
+!/keyboards/zsa/voyager
+!/keyboards/zsa/voyager/**
+!/keyboards/zsa/voyager/keymaps/**
