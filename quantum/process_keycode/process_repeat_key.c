@@ -64,6 +64,7 @@ static bool remember_last_key(uint16_t keycode, keyrecord_t* record, uint8_t* re
             break;
 #endif // SWAP_HANDS_ENABLE
 
+        case QK_ARCANE:
         case QK_REPEAT_KEY:
 #ifndef NO_ALT_REPEAT_KEY
         case QK_ALT_REPEAT_KEY:
