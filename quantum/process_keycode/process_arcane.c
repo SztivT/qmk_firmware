@@ -1,4 +1,5 @@
 #include "action.h"
+#include "matrix.h"
 #include "leader.h"
 
 #ifndef ARCANE_LEAD_TIME
@@ -20,6 +21,21 @@ bool process_arcane(uint16_t keycode, keyrecord_t* record) {
     if (record->event.pressed && timer_elapsed(arcane_last_record->event.time) > ARCANE_LEAD_TIME) {
         arcane_leader_engaged = true;
 
+        return false;
+    }
+
+    /*
+     * Decide which side sent arcane
+     */
+    if (record->event.pressed && !arcane_leader_engaged) {
+        if ((record->event.key.row < matrix_rows() / 2
+               && arcane_last_record->event.key.row < matrix_rows() / 2)
+          || (record-> event.key.row >= matrix_rows() / 2
+               && arcane_last_record->event.key.row >= matrix_rows() / 2)) {
+            tap_code(KC_R);
+            return false;
+        }
+        tap_code(KC_O);
         return false;
     }
 
