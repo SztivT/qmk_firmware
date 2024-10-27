@@ -9,7 +9,8 @@
 
 bool arcane_leader_engaged;
 
-__attribute__((weak)) bool process_arcane_tap_user(uint16_t keycode) { return true; }
+__attribute__((weak)) bool process_arcane_same_side_tap_user(uint16_t keycode) { return true; }
+__attribute__((weak)) bool process_arcane_opposite_side_tap_user(uint16_t keycode) { return true; }
 
 bool process_arcane(uint16_t keycode, keyrecord_t* record) {
     if (keycode != QK_ARCANE) { return true; }
@@ -31,10 +32,14 @@ bool process_arcane(uint16_t keycode, keyrecord_t* record) {
                && get_last_record()->event.key.row < matrix_rows() / 2)
           || (record-> event.key.row >= matrix_rows() / 2
                && get_last_record()->event.key.row >= matrix_rows() / 2)) {
-            repeat_key_invoke(&record->event);
+            if (process_arcane_same_side_tap_user(keycode)) {
+                repeat_key_invoke(&record->event);
+            }
             return false;
         }
-        alt_repeat_key_invoke(&record->event);
+        if (process_arcane_opposite_side_tap_user(keycode)) {
+            alt_repeat_key_invoke(&record->event);
+        }
         return false;
     }
 
