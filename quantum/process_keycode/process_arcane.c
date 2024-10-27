@@ -12,6 +12,14 @@ bool arcane_leader_engaged;
 __attribute__((weak)) bool process_arcane_same_side_tap_user(uint16_t keycode) { return true; }
 __attribute__((weak)) bool process_arcane_opposite_side_tap_user(uint16_t keycode) { return true; }
 
+bool is_main_side(keyrecord_t* record) {
+    return record->event.key.row < matrix_rows() / 2;
+}
+
+bool is_same_side(keyrecord_t* base, keyrecord_t* compare) {
+        return (is_main_side(base) && is_main_side(compare)) || (!is_main_side(base) && !is_main_side(compare));
+}
+
 bool process_arcane(uint16_t keycode, keyrecord_t* record) {
     if (keycode != QK_ARCANE) { return true; }
 
@@ -28,10 +36,7 @@ bool process_arcane(uint16_t keycode, keyrecord_t* record) {
      * Decide which side sent arcane
      */
     if (!arcane_leader_engaged) {
-        if ((record->event.key.row < matrix_rows() / 2
-               && get_last_record()->event.key.row < matrix_rows() / 2)
-          || (record-> event.key.row >= matrix_rows() / 2
-               && get_last_record()->event.key.row >= matrix_rows() / 2)) {
+        if (is_same_side(record, get_last_record())) {
             if (process_arcane_same_side_tap_user(keycode)) {
                 repeat_key_invoke(&record->event);
             }
