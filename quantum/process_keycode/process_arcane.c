@@ -18,7 +18,7 @@ bool process_arcane(uint16_t keycode, keyrecord_t* record) {
     /*
      * Compare elapsed time since the last registered record with the leader mode activation timeout on keypress.
      */
-    if (record->event.pressed && timer_elapsed(get_last_record()->event.time) > ARCANE_LEAD_TIME) {
+    if (record->event.pressed && record->event.time - get_last_record()->event.time > ARCANE_LEAD_TIME) {
         arcane_leader_engaged = true;
 
         return false;
